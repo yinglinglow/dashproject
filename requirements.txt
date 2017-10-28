@@ -3,3 +3,4 @@ dash-renderer==0.11.1
 dash-html-components==0.8.0
 dash-core-components==0.14.0
 plotly==2.1.0
+gunicorn==19.7.1
