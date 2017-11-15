@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import telegram
+import os
 from flask import Flask, request
 
 app = Flask(__name__)
@@ -7,6 +8,15 @@ app = Flask(__name__)
 global bot
 bot = telegram.Bot(token=[TELEGRAM_TOKEN])
 
+TOKEN = [TELEGRAM_TOKEN]
+PORT = int(os.environ.get('PORT', '5000'))
+updater = Updater(TOKEN)
+
+# add handlers
+updater.start_webhook(listen="0.0.0.0",
+                      port=PORT,
+                      url_path=TOKEN)
+                      
 
 @app.route('/HOOK', methods=['POST'])
 def webhook_handler():
@@ -27,7 +37,7 @@ def webhook_handler():
 
 @app.route('/set_webhook', methods=['GET', 'POST'])
 def set_webhook():
-    s = bot.setWebhook('https://URL/HOOK')
+    s = bot.setWebhook('https://dashproject.herokuapp.com/HOOK')
     if s:
         return "webhook setup ok"
     else:
@@ -37,3 +47,7 @@ def set_webhook():
 @app.route('/')
 def index():
     return '.'
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -2,3 +2,5 @@ astroid==1.5.3
 haversine==0.4.5
 pandas==0.20.3
 python-telegram-bot==8.0
+Flask==0.12.2
+Flask-Compress==1.4.0
