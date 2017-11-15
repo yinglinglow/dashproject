@@ -58,7 +58,7 @@ def respond(bot, update):
 
     def postalcode(userinput):
         front_url = "https://maps.googleapis.com/maps/api/geocode/json?address="
-        end_url = "&components=country:SG&key=AIzaSyB-lR8VoOizlVvhK-p8CR6Lol-wb2RgSM0"
+        end_url = "&components=country:SG&key="+ ENV["GOOGLEMAPS_TOKEN"]
         url = front_url + str(userinput) + end_url
         address = pd.read_json(url)
         p_lat = radians(address['results'][0]['geometry']['location']['lat'])
@@ -121,7 +121,7 @@ def main():
     """ This is where the bot starts from! """
 
     # Create the EventHandler and pass it your bot's token.
-    telegram = [TELEGRAM_TOKEN] # saved on heroku's config vars
+    telegram = ENV["TELEGRAM_TOKEN"] # saved on heroku's config vars
 
     bot = telegram.Bot(token=telegram)
     updater = Updater(token=telegram)
