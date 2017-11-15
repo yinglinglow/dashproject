@@ -8,12 +8,6 @@ from haversine import haversine
 from math import radians
 import ast
 
-app = Flask(__name__)
-
-global bot
-bot = telegram.Bot(token=[TELEGRAM_TOKEN])
-
-TOKEN = [TELEGRAM_TOKEN]
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
