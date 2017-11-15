@@ -1,2 +1,1 @@
-To run the app locally:
-    python3 app.py
+Testing telegram bot on heroku
