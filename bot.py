@@ -97,7 +97,7 @@ def respond(bot, update):
             top_five = df.sort_values('Distance_km').head(5)
             
             for row in top_five['Info']:
-                bot.send_message(chat_id=update.message.chat_id, parse_mode='HTML', text=row)
+                bot.send_message(chat_id=update.message.chat_id, parse_mode='HTML', text=row.replace('\$','$'))
                 
             bot.send_message(chat_id=update.message.chat_id, text="Fast hor! If you want to check other places, type /start again ok :P")
         
