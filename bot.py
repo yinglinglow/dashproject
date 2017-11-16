@@ -12,6 +12,9 @@ import ast
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+telegram_token = str(os.environ.get('TELEGRAM_TOKEN'))
+google_token = str(os.environ.get('GOOGLEMAPS_TOKEN'))
+
 def start(bot, update):
     """ When user presses /start, prompts user for location or postal code with buttons"""
 
@@ -26,8 +29,8 @@ def location(bot, update):
     """ If user sends location """
 
     bot.send_message(chat_id=update.message.chat_id, text="OK you wait ah...")
-    latitude = update.message.location.latitude 
-    longitude = update.message.location.longitude 
+    latitude = update.message.location.latitude
+    longitude = update.message.location.longitude
     bot.send_message(chat_id=update.message.chat_id, text="Just let you know for fun lol - your latitude is {0}, and your longitude is {1}".format(latitude,longitude))
     try:
         # Read carpark csv as dataframe
@@ -58,7 +61,7 @@ def respond(bot, update):
 
     def postalcode(userinput):
         front_url = "https://maps.googleapis.com/maps/api/geocode/json?address="
-        end_url = "&components=country:SG&key="+ ENV["GOOGLEMAPS_TOKEN"]
+        end_url = "&components=country:SG&key="+ google_token
         url = front_url + str(userinput) + end_url
         address = pd.read_json(url)
         p_lat = radians(address['results'][0]['geometry']['location']['lat'])
@@ -120,51 +123,29 @@ def error(bot, update, error):
 def main():
     """ This is where the bot starts from! """
 
-    # Create the EventHandler and pass it your bot's token.
-    telegram = ENV["TELEGRAM_TOKEN"] # saved on heroku's config vars
-
-    bot = telegram.Bot(token=telegram)
-    updater = Updater(token=telegram)
-    j = updater.job_queue
+    updater = Updater(token=telegram_token)
 
     # Get the dispatcher to register handlers
     dispatch = updater.dispatcher
 
     # on different commands - answer in Telegram
     start_handler = CommandHandler('start', start)
-    dispatcher.add_handler(start_handler)
+    dispatch.add_handler(start_handler)
 
     location_handler = MessageHandler(Filters.location, location)
-    dispatcher.add_handler(location_handler)
+    dispatch.add_handler(location_handler)
 
     respond_handler = MessageHandler(Filters.text, respond)
-    dispatcher.add_handler(respond_handler)
+    dispatch.add_handler(respond_handler)
 
     help_handler = CommandHandler('help', help)
-    dispatcher.add_handler(help_handler)
+    dispatch.add_handler(help_handler)
 
     unknown_handler = MessageHandler(Filters.command, unknown)
-    dispatcher.add_handler(unknown_handler)
-
-    # create jobs
-    # job_minute = Job(monitor_promo, 900)
-    # j.put(job_minute, next_t=60)
-
-    j.run_repeating(monitor_promo, 600, 15)
-    j.run_repeating(monitor_train, 300, 60)
+    dispatch.add_handler(unknown_handler)
 
     # log all errors
     dispatch.add_error_handler(error)
-
-    # Start the Bot
-    """
-    #DEV
-    updater.start_polling()
-    # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
-    updater.idle()
-    """
 
     #PROD
     port_number = int(os.environ.get('PORT', '5000'))
