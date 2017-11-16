@@ -18,11 +18,10 @@ google_token = str(os.environ.get('GOOGLEMAPS_TOKEN'))
 def start(bot, update):
     """ When user presses /start, prompts user for location or postal code with buttons"""
 
-    location_keyboard = telegram.KeyboardButton(text="Send current location", request_location=True)
-
     postal_code = telegram.KeyboardButton(text="Input a postal code")
 
-    if update.message.chat.type != 'private':
+    if update.message.chat.type == 'private':
+        location_keyboard = telegram.KeyboardButton(text="Send current location", request_location=True)
         custom_keyboard = [[location_keyboard, postal_code]]
     else:
         custom_keyboard = [[postal_code]]
