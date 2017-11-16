@@ -19,8 +19,13 @@ def start(bot, update):
     """ When user presses /start, prompts user for location or postal code with buttons"""
 
     location_keyboard = telegram.KeyboardButton(text="Send current location", request_location=True)
+
     postal_code = telegram.KeyboardButton(text="Input a postal code")
-    custom_keyboard = [[location_keyboard, postal_code]]
+
+    if update.message.chat.type != 'private':
+        custom_keyboard = [[location_keyboard, postal_code]]
+    else:
+        custom_keyboard = [[postal_code]]
     reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard, one_time_keyboard=True, resize_keyboard=True)
     bot.send_message(chat_id=update.message.chat_id, text="Hello hello! You want to send me your current location or input a postal code?", reply_markup=reply_markup)
 
