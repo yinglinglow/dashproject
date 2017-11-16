@@ -196,7 +196,7 @@ def main():
     help_handler = CommandHandler('help', help)
     dispatch.add_handler(help_handler)
 
-    find_handler = CommandHandler('find', findlocation)
+    find_handler = CommandHandler('find', findlocation, pass_args=True)
     dispatch.add_handler(find_handler)
 
     unknown_handler = MessageHandler(Filters.command, unknown)
