@@ -26,7 +26,7 @@ def start(bot, update):
         reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard, one_time_keyboard=True, resize_keyboard=True)
         bot.send_message(chat_id=update.message.chat_id, text=chat_reply, reply_markup=reply_markup)
     else:
-        chat_reply = "Hello hello! Please type /find and the postal code of the place you want to check (e.g. /find 098585). If you want to directly send your location, talk to me in private ;)"
+        chat_reply = "Hello hello! Please type /find@SGParkingBot and the postal code of the place you want to check (e.g. /find@SGParkingBot 098585). If you want to directly send me your location, talk to me in private ;)"
         bot.send_message(chat_id=update.message.chat_id, text=chat_reply)
 
 
