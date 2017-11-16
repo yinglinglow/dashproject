@@ -77,11 +77,11 @@ def respond(bot, update):
     
     if update.message.text == 'Input a postal code':
         bot.send_message(chat_id=update.message.chat_id, text="Ok please give me a postal code (6 digits only hor)")
-    elif len(update.message.text) == 6:
+    elif len(update.message.text) == 6 and str(update.message.text).isnumeric():
         bot.send_message(chat_id=update.message.chat_id, text="You wait ah I check")
         try:
             # Check if Google Maps API is able to get geo coords from the 6 digits
-            postal = postalcode(int(update.message.text))
+            postal = postalcode(str(update.message.text))
             
             # Read carpark csv as dataframe
             df = pd.read_csv('Parking_withcoords.csv')
